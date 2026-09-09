@@ -1,45 +1,34 @@
-name: Build iOS26Apps.deb
+name: Build iOS26Apps
 
 on:
+  workflow_dispatch:
   push:
-    branches: [ main ]
-  workflow_dispatch: {}   # permite lanzarlo a mano desde la pestaña "Actions"
+    branches:
+      - main
 
 jobs:
   build:
-    runs-on: macos-13   # runner con Xcode preinstalado, más fiable para compilar cosas de iOS
+    runs-on: macos-latest
 
     steps:
-      - name: Clonar el repo
+      - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Instalar Theos
-        run: |
-          export THEOS=$HOME/theos
-          git clone --recursive https://github.com/theos/theos.git $THEOS
-          echo "THEOS=$THEOS" >> $GITHUB_ENV
+      - name: Setup Theos
+        uses: waruhachi/theos-action@v2.4.6
+        with:
+          theos-src: 'theos/theos'
+          theos-branch: 'master'
+          sdks-src: 'theos/sdks'
+          sdks-branch: 'master'
 
-      - name: Descargar SDK de iOS 15.5
+      - name: Build Rootless package
         run: |
-          git clone -n --depth=1 --filter=tree:0 https://github.com/theos/sdks.git /tmp/sdks
-          cd /tmp/sdks
-          git sparse-checkout set --no-cone iPhoneOS15.5.sdk
-          git checkout
-          mkdir -p $THEOS/sdks
-          cp -R iPhoneOS15.5.sdk $THEOS/sdks/
-
-      - name: Instalar ldid
-        run: |
-          brew install ldid || true
-
-      - name: Compilar el .deb
-        run: |
-          export THEOS=$HOME/theos
           make clean
-          make package FINALPACKAGE=1
+          make package FINALPACKAGE=1 THEOS_PACKAGE_SCHEME=rootless
 
-      - name: Subir el .deb como artifact descargable
+      - name: Upload DEB
         uses: actions/upload-artifact@v4
         with:
-          name: iOS26Apps-deb
+          name: iOS26Apps-rootless
           path: packages/*.deb
