@@ -1,0 +1,11 @@
+Package: com.tuusuario.ios26apps
+Name: iOS 26 Apps & Tweaks
+Version: 1.0.0
+Architecture: iphoneos-arm64
+Description: Apartado de Ajustes estilo iOS 26 que lista Apps y Tweaks instalados (Dopamine Rootless).
+Maintainer: Tu Nombre
+Author: Tu Nombre
+Section: Tweaks
+Depends: firmware (>= 15.0), mobilesubstrate | com.opa334.dopaminebugfix, org.coolstar.libhooker
+Homepage: https://example.com
+Icon: (opcional) file:///Library/Application Support/iOS26Apps/icon.png
