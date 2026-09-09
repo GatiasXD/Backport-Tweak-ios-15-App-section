@@ -1,6 +1,6 @@
 export THEOS_DEVICE_IP =
 export ARCHS = arm64
-export TARGET = iphone:clang:15.5:15.0
+export TARGET = iphone:clang:15.6:15.0
 
 # Rootless (Dopamine) — muy importante
 export THEOS_PACKAGE_SCHEME = rootless
