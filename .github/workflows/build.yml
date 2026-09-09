@@ -1,0 +1,45 @@
+name: Build iOS26Apps.deb
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch: {}   # permite lanzarlo a mano desde la pestaña "Actions"
+
+jobs:
+  build:
+    runs-on: macos-13   # runner con Xcode preinstalado, más fiable para compilar cosas de iOS
+
+    steps:
+      - name: Clonar el repo
+        uses: actions/checkout@v4
+
+      - name: Instalar Theos
+        run: |
+          export THEOS=$HOME/theos
+          git clone --recursive https://github.com/theos/theos.git $THEOS
+          echo "THEOS=$THEOS" >> $GITHUB_ENV
+
+      - name: Descargar SDK de iOS 15.5
+        run: |
+          git clone -n --depth=1 --filter=tree:0 https://github.com/theos/sdks.git /tmp/sdks
+          cd /tmp/sdks
+          git sparse-checkout set --no-cone iPhoneOS15.5.sdk
+          git checkout
+          mkdir -p $THEOS/sdks
+          cp -R iPhoneOS15.5.sdk $THEOS/sdks/
+
+      - name: Instalar ldid
+        run: |
+          brew install ldid || true
+
+      - name: Compilar el .deb
+        run: |
+          export THEOS=$HOME/theos
+          make clean
+          make package FINALPACKAGE=1
+
+      - name: Subir el .deb como artifact descargable
+        uses: actions/upload-artifact@v4
+        with:
+          name: iOS26Apps-deb
+          path: packages/*.deb
