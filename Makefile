@@ -20,8 +20,7 @@ iOS26Apps_FILES = Tweak/Tweak.xm \
 
 iOS26Apps_CFLAGS = -fobjc-arc -IHeaders
 iOS26Apps_FRAMEWORKS = UIKit Foundation CoreGraphics
-iOS26Apps_PRIVATE_FRAMEWORKS = SpringBoardServices
-iOS26Apps_EXTRA_FRAMEWORKS =
+iOS26Apps_PRIVATE_FRAMEWORKS = SpringBoardServices Preferences MobileCoreServices
 
 include $(THEOS_MAKE_PATH)/tweak.mk
 
