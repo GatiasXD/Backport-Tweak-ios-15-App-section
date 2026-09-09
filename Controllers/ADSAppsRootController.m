@@ -37,7 +37,6 @@ static NSString * const kCellID = @"ADSCell";
     self.title = @"Apps";
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
-    self.tableView.style = UITableViewStyleInsetGrouped; // look "iOS 26 / moderno" con esquinas redondeadas
     [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:kCellID];
 
     [self reloadData];
