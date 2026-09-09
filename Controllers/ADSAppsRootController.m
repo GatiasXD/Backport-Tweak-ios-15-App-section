@@ -22,7 +22,9 @@ static NSString * const kCellID = @"ADSCell";
 - (id)init {
     // -init de PSListController normalmente espera un "plist name"; pasamos nil
     // porque no usamos specifiers desde un archivo, generamos la tabla a mano.
-    self = [super init];
+    // El estilo de la tabla se fija en la creación (initWithStyle:), no se puede
+    // cambiar después vía self.tableView.style (esa propiedad es de solo lectura).
+    self = [super initWithStyle:UITableViewStyleInsetGrouped];
     if (self) {
         self.title = @"Apps";
     }
